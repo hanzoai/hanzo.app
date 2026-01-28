@@ -1,0 +1,26 @@
+# Hanzo App
+
+> Web dashboard for managing AI models, cloud resources, and blockchain services on the Hanzo AI platform.
+
+## About
+Hanzo App is the primary web interface for the Hanzo AI platform. It provides a unified dashboard for managing AI model deployments, cloud infrastructure resources, blockchain services, team collaboration, and billing. Users can monitor model performance, configure APIs, manage deployments, and access all Hanzo services from a single interface.
+
+## Key Features
+- AI model management: deploy, monitor, and scale models
+- Cloud resource dashboard: GPU clusters, storage, compute
+- Blockchain service management: nodes, wallets, webhooks
+- Team collaboration and access control
+- API key management and usage analytics
+- Billing and subscription management
+- Real-time monitoring and logging
+- Integration with Hanzo Dev and AI Studio
+
+## Links
+- [App Dashboard](https://app.hanzo.ai)
+- [Hanzo AI](https://hanzo.ai)
+- [Documentation](https://docs.hanzo.ai)
+- [API Reference](https://docs.hanzo.ai/api)
+- [Status](https://status.hanzo.ai)
+
+## Contact
+- Support: support@hanzo.ai
