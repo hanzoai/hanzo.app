@@ -1,75 +1,62 @@
-# Maintenance Report
+# hanzo.app
 
-## Recent Changes (2025-06-16)
+Marketing and product site for Hanzo AI native applications (hanzo.app). Serves as the main app landing, product catalog, and account management portal for the Hanzo ecosystem.
 
-### Updated Signup Button Styling
-- **Issue**: White background signup buttons were not very visible and lacked proper hover states
-- **Solution**: Updated all signup buttons across the site to have:
-  - White background with gray border by default
-  - On hover: transparent background with white text and white border
-  - Smooth transition animations
-- **Files Updated**:
-  - `/src/components/pricing/PricingPlan.tsx` - Updated pricing plan buttons
-  - `/src/components/Products.tsx` - Updated "Get Started Free" button
-  - `/src/components/navigation/AuthButtons.tsx` - Updated navigation signup button
-  - `/src/components/navigation/MobileMenu.tsx` - Updated mobile menu signup button
-  - `/src/components/landing/HeroSection.tsx` - Updated landing page hero button
-  - `/src/components/pricing/TeamPlanDetails.tsx` - Updated team plan configuration button
+## Stack
 
-## Recent Changes (2025-04-07)
+- React 18 + TypeScript (Vite 5, SWC)
+- React Router v6 (client-side routing)
+- Tailwind CSS v4 + Radix UI primitives
+- Framer Motion (animations), Three.js (3D), Recharts (charts)
+- @paper-design/shaders-react (WebGL shader effects)
+- @xyflow/react (node graph editor)
 
-### 1. Fixed ProductsMenu Import in DesktopNav.tsx
-- **Issue**: The ProductsMenu component had both named and default exports, but was imported as a default import in DesktopNav.tsx, causing an error: "lockdown-install.js:1:135422 'http://localhost:8080/src/components/navigation/products-menu/index.tsx' doesn't provide an export named: 'ProductsMenu'"
-- **Solution**: Updated the import in DesktopNav.tsx to use a named import for consistency with other menu components.
-- **Commit**: Current commit - "Fix ProductsMenu import in DesktopNav.tsx to use named import"
+## Structure
 
+```
+src/
+  App.tsx             # Root router -- splits AccountRoutes vs MarketingRoutes
+  pages/
+    AppLanding.tsx    # Homepage (/) -- app showcase (Dev, Chat, Design, Flow)
+    Index.tsx         # Alternate homepage (/original, /index)
+    AI.tsx, Cloud.tsx, Commerce.tsx, Blockchain.tsx, ...  # Product pages
+    blockchain/       # Sub-pages: Nodes, Wallet, Bridge, DeFi, Explorer, etc.
+    products/         # Dynamic taxonomy: CategoryPage, ProductPage, Integrations
+    LoginPage.tsx, SignUpPage.tsx, Dashboard.tsx          # Auth + account
+  components/
+    navigation/       # Navbar, DesktopNav, MobileMenu, ProductsMenu
+    account/          # AccountLayout (billing, usage, invoices, settings)
+    hero/, landing/   # Hero sections, marketing blocks
+    ai/, cloud/, blockchain/, commerce/  # Feature-specific UI
+  contexts/           # ThemeContext, AccountContext, BillingContext
+  data/               # Static data (product lists, pricing tiers)
+  services/           # API client helpers
+  hooks/              # Custom React hooks
+```
 
-### 2. Fixed ProductsMenu Export/Import Issue
-- **Issue**: The ProductsMenu component was exported with a named export but imported as a default export in DesktopNav.tsx, causing a module resolution error: "The requested module doesn't provide an export named: 'ProductsMenu'"
-- **Solution**: Added default export to ProductsMenu and updated the import in DesktopNav.tsx to use a default import.
-- **Commit**: [fdf6f92](https://github.com/hanzoai/hanzo.ai/commit/fdf6f92) - "Fix ProductsMenu export and update Node.js compatibility"
+## Key Routes
 
-### 3. Updated Node.js Version Requirements
-- **Issue**: The project required modern JavaScript features (nullish coalescing assignment operator) not supported in Node.js v14.
-- **Solution**: Added .nvmrc file specifying Node.js v20 and updated package.json script to suppress warnings.
-- **Commit**: [fdf6f92](https://github.com/hanzoai/hanzo.ai/commit/fdf6f92) - "Fix ProductsMenu export and update Node.js compatibility"
+- `/` -- AppLanding (app showcase hero)
+- `/ai`, `/cloud`, `/platform`, `/commerce`, `/blockchain` -- Product pages
+- `/products/:categoryId/:productId` -- Dynamic product taxonomy
+- `/pricing`, `/solutions`, `/enterprise` -- Sales pages
+- `/account/*` -- Dashboard, billing, usage, invoices, settings
+- `/team/:role` -- 16 AI team member pages (dev, vi, opera, chat, etc.)
 
+## Commands
 
+```bash
+pnpm install
+pnpm dev            # Vite dev server (localhost:5173)
+pnpm build          # Production build to dist/
+pnpm preview        # Preview production build
+pnpm lint           # ESLint
+```
 
-## Issues Identified
+## Notes
 
-### 1. Component Export/Import Inconsistency (Historical)
-- **Issue**: The ProductsMenu component was using a default export while being imported as a named export in DesktopNav.
-- **Solution**: Changed ProductsMenu to use named export for consistency with other menu components.
-- **Commit**: [68f3e2c](https://github.com/hanzoai/hanzo.ai/commit/68f3e2c) - "Fix: Change ProductsMenu to use named export for consistency"
-
-### 2. Node.js Version Compatibility
-- **Status**: RESOLVED
-- **Issue**: The project required Node.js with support for modern JavaScript features.
-- **Solution**: Added .nvmrc specifying Node.js v20 and configured package.json to suppress warnings.
-- **Command to use**: 
-  ```bash
-  nvm use
-  npm run dev
-  ```
-
-### 3. Security Vulnerabilities
-- GitHub reports 2 moderate security vulnerabilities in the dependencies.
-- **Recommendation**: Review and address these vulnerabilities using:
-  ```bash
-  npm audit fix
-  # or for a more aggressive approach that might update to new major versions
-  npm audit fix --force
-  ```
-
-## Project Structure Analysis
-- The project is a React application using Vite as the build tool.
-- Routing is handled by react-router-dom with separate routes for marketing pages and account pages.
-- UI components are organized by feature/page in the components directory.
-- The navigation system uses dropdown menus for Products, Solutions, and Resources sections.
-
-## Next Steps
-1. Upgrade Node.js to a compatible version (v18+).
-2. Run `npm install` to ensure all dependencies are properly installed.
-3. Address security vulnerabilities with `npm audit fix`.
-4. Continue with feature development or bug fixes as needed.
+- All 5 domain sites (hanzo.app, hanzo.id, hanzo.network, hanzo.one, sensei.group) share the same component library and routes. Each has a unique landing page and index.html metadata.
+- This site uses `AppLanding` as its homepage, showcasing Hanzo Dev, Chat, Design, and Flow apps.
+- GlobalChatWidget renders on every page. KonamiCode provides an easter egg.
+- Node.js v20+ required (.nvmrc). Use `--no-warnings` flag with Vite.
+- Built with lovable-tagger dev dependency (Lovable.dev scaffolded origin).
