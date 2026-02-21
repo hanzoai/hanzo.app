@@ -621,18 +621,18 @@ export const mlProducts: Product[] = [
     id: 'zen',
     name: 'Zen Models',
     shortName: 'Zen',
-    tagline: 'Hypermodal AI model family',
-    description: 'Complete foundation model ecosystem from edge to cloud. Language, vision, 3D, video, and audio generation in a unified family.',
+    tagline: '14-model AI lineup from edge to frontier',
+    description: 'Zen4 (GLM-5, Qwen3 MoE) and Zen3 (multimodal, vision, safety, embeddings). 9 Zen4 + 5 Zen3 models with OpenAI-compatible API.',
     category: 'ml',
     subcategory: 'Models',
     icon: 'Sparkles',
     href: '/products/ml/zen',
     github: 'https://github.com/zenlm',
     docs: 'https://docs.hanzo.ai/zen',
-    features: ['Language (0.6B-30B)', 'Vision-Language', '3D Generation', 'Video Generation', 'Audio/Music', 'Edge Optimized', 'MCP Support', 'Apache 2.0'],
+    features: ['Zen4 Flagship (GLM-5 ~400B)', 'Zen4 Coder (480B MoE, 262K ctx)', 'Zen4 Thinking (MoE+CoT)', 'Zen3 Omni (multimodal)', 'Zen3 VL (vision-language)', 'Zen3 Guard (safety)', 'Zen3 Embedding', 'OpenAI-compatible API'],
     status: 'ga',
     openSource: true,
-    pricing: 'free'
+    pricing: 'freemium'
   },
   {
     id: 'enso',

@@ -8,9 +8,6 @@ import {
   ArrowRight,
   Code2,
   Eye,
-  Box,
-  Video,
-  Music,
   Zap,
   ExternalLink,
   Brain,
@@ -25,27 +22,27 @@ import {
 const MODEL_CATEGORIES = [
   {
     icon: Brain,
-    title: "Core Language Models",
+    title: "Zen4 Flagship",
     count: "6 models",
-    description: "0.6B to 32B parameters for edge to cloud deployment. Optimized for real-time instruction following and reasoning.",
-  },
-  {
-    icon: Eye,
-    title: "Multimodal Models",
-    count: "10 models",
-    description: "Vision, audio, video, 3D generation, and spatial understanding. Seamless XR/VR platform integration.",
+    description: "GLM-5 (~400B) and Qwen3 MoE models. zen4, zen4-ultra, zen4-pro, zen4-max, zen4-mini, and zen4-thinking.",
   },
   {
     icon: Code2,
-    title: "Zen Coder",
-    count: "5 models",
-    description: "4B to 1T parameters trained on 8.47B tokens. State-of-the-art agentic coding and tool use.",
+    title: "Zen4 Coder",
+    count: "3 models",
+    description: "Qwen3-Coder with 262K context. zen4-coder (480B MoE), zen4-coder-pro (480B BF16), zen4-coder-flash (30B MoE).",
+  },
+  {
+    icon: Eye,
+    title: "Zen3 Multimodal",
+    count: "2 models",
+    description: "zen3-omni (GLM-4.7 ~200B multimodal) and zen3-vl (Qwen3-VL-30B-A3B) for vision-language tasks.",
   },
   {
     icon: Shield,
-    title: "Specialized Systems",
-    count: "8 models",
-    description: "Agent frameworks, safety guardrails, embeddings, and IDE tools for production AI.",
+    title: "Zen3 Specialized",
+    count: "3 models",
+    description: "zen3-nano (4B edge), zen3-guard (safety), zen3-embedding (text-embedding-3-large) for vectors.",
   },
 ];
 
@@ -77,20 +74,20 @@ const BRAND_COLOR = "#8b5cf6"; // Purple for Zen
 
 // Quick stats for the demo panel
 const QUICK_STATS = [
-  { label: "Models", value: "30+" },
-  { label: "Params", value: "0.6B-1T" },
-  { label: "Tokens", value: "8.47B" },
-  { label: "Latency", value: "<10ms" },
+  { label: "Models", value: "14" },
+  { label: "Params", value: "4B-480B" },
+  { label: "Context", value: "262K" },
+  { label: "Starting", value: "$0.30/M" },
 ];
 
 const Zen = () => {
   return (
     <div className="min-h-screen bg-[var(--black)] text-[var(--white)]">
       <Helmet>
-        <title>Zen LM - Open Foundation Models for Agentic AI | Hanzo AI</title>
+        <title>Zen Models - 14 AI Models from Edge to Frontier | Hanzo AI</title>
         <meta
           name="description"
-          content="Real-time hyper-modal AI for XR/VR/Robotics. 30+ open models from 0.6B to 1T parameters across language, vision, audio, video, and 3D."
+          content="14 Zen models across Zen4 and Zen3 generations. GLM-5 flagship, Qwen3 MoE coding, multimodal vision, safety, and embeddings. OpenAI-compatible API."
         />
       </Helmet>
       <Navbar />
@@ -131,9 +128,9 @@ const Zen = () => {
                   transition={{ duration: 0.4, delay: 0.05 }}
                   className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-medium tracking-tight leading-[1.1] mb-6"
                 >
-                  <span className="text-white">Real-Time Hyper-Modal AI</span>
+                  <span className="text-white">Zen Model Lineup</span>
                   <br />
-                  <span className="text-neutral-400">for XR/VR/Robotics</span>
+                  <span className="text-neutral-400">Edge to Frontier AI</span>
                 </motion.h1>
 
                 <motion.p
@@ -142,8 +139,8 @@ const Zen = () => {
                   transition={{ duration: 0.4, delay: 0.1 }}
                   className="text-base lg:text-lg text-neutral-400 leading-relaxed mb-8 max-w-xl"
                 >
-                  Zen LM powers next-generation XR/VR applications and robotic systems with real-time multimodal
-                  understanding. Sub-10ms latency for seamless human-AI interaction.
+                  14 production-ready models across Zen4 and Zen3 generations. GLM-5 flagship reasoning,
+                  Qwen3 MoE coding with 262K context, multimodal vision, safety, and embeddings.
                 </motion.p>
 
                 {/* CTAs */}
@@ -235,15 +232,15 @@ const Zen = () => {
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 text-sm">
                         <Brain className="w-4 h-4 text-purple-400" />
-                        <span className="text-neutral-300">Language • Vision • Audio • Video • 3D</span>
+                        <span className="text-neutral-300">Flagship • Coder • Multimodal • Safety • Embeddings</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <Code2 className="w-4 h-4 text-purple-400" />
-                        <span className="text-neutral-300">Agentic coding with tool use</span>
+                        <span className="text-neutral-300">OpenAI-compatible API at api.hanzo.ai</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <Shield className="w-4 h-4 text-purple-400" />
-                        <span className="text-neutral-300">Apache 2.0 • Open weights & training</span>
+                        <span className="text-neutral-300">qwen3+ only • GLM-5 and Qwen3 MoE</span>
                       </div>
                     </div>
                   </div>
@@ -354,7 +351,7 @@ const Zen = () => {
               >
                 <div className="text-3xl mb-4">🤗</div>
                 <h3 className="text-xl font-semibold text-white mb-2">HuggingFace</h3>
-                <p className="text-neutral-400 text-sm">Access all 30+ models via HuggingFace Hub</p>
+                <p className="text-neutral-400 text-sm">Access Zen models via HuggingFace Hub</p>
               </motion.a>
 
               <motion.a

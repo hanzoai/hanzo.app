@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronDown, ExternalLink, Brain, Video, Music, Box, Cpu, Sparkles, Zap } from "lucide-react";
+import { Search, ChevronDown, ExternalLink, Brain, Video, Music, Box, Code, Cpu, Sparkles, Zap } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -10,39 +10,39 @@ interface AuthButtonsProps {
   onOpenCommandPalette?: () => void;
 }
 
-// Zen model family for dropdown
+// Zen model family for dropdown — top picks from the 14-model lineup
 const zenModels = [
   {
-    name: "zen-eco",
-    params: "4B",
-    description: "Fast general-purpose LLM",
+    name: "zen4",
+    params: "~400B",
+    description: "Flagship reasoning (GLM-5)",
     icon: Brain,
-    href: "https://huggingface.co/zenlm/zen-eco-4b-instruct",
-    external: true,
+    href: "/zen/models",
+    external: false,
   },
   {
-    name: "zen-omni",
-    params: "8B",
-    description: "Multimodal vision + audio",
+    name: "zen4-coder",
+    params: "480B/35B MoE",
+    description: "Agentic coding, 262K context",
+    icon: Code,
+    href: "/zen/models",
+    external: false,
+  },
+  {
+    name: "zen3-omni",
+    params: "~200B",
+    description: "Multimodal (GLM-4.7)",
     icon: Sparkles,
-    href: "https://huggingface.co/zenlm/zen-omni-8b",
-    external: true,
+    href: "/zen/models",
+    external: false,
   },
   {
-    name: "zen-director",
-    params: "5B",
-    description: "Text-to-video generation",
-    icon: Video,
-    href: "https://huggingface.co/zenlm/zen-director-5b",
-    external: true,
-  },
-  {
-    name: "zen-3d",
-    params: "3.3B",
-    description: "3D asset generation",
-    icon: Box,
-    href: "https://huggingface.co/zenlm/zen-3d",
-    external: true,
+    name: "zen4-mini",
+    params: "8B",
+    description: "Fast, low-cost inference",
+    icon: Zap,
+    href: "/zen/models",
+    external: false,
   },
 ];
 
@@ -167,15 +167,8 @@ const AuthButtons = ({ user, onOpenCommandPalette }: AuthButtonsProps) => {
                 <div className="grid grid-cols-2 gap-2">
                   {zenModels.map((model) => {
                     const ModelIcon = model.icon;
-                    return (
-                      <a
-                        key={model.name}
-                        href={model.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="group flex items-start gap-3 p-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-800 transition-colors"
-                      >
+                    const content = (
+                      <div className="group flex items-start gap-3 p-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-800 transition-colors">
                         <div className="w-8 h-8 rounded-lg bg-neutral-700/50 flex items-center justify-center flex-shrink-0">
                           <ModelIcon className="w-4 h-4 text-neutral-300 group-hover:text-white transition-colors" />
                         </div>
@@ -186,7 +179,31 @@ const AuthButtons = ({ user, onOpenCommandPalette }: AuthButtonsProps) => {
                           </div>
                           <p className="text-xs text-neutral-400 truncate">{model.description}</p>
                         </div>
-                      </a>
+                      </div>
+                    );
+
+                    if (model.external) {
+                      return (
+                        <a
+                          key={model.name}
+                          href={model.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          {content}
+                        </a>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={model.name}
+                        to={model.href}
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        {content}
+                      </Link>
                     );
                   })}
                 </div>

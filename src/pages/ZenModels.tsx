@@ -8,9 +8,6 @@ import {
   ArrowRight,
   Code2,
   Eye,
-  Box,
-  Video,
-  Music,
   Zap,
   ExternalLink,
   Check,
@@ -26,441 +23,403 @@ import {
   Download,
 } from "lucide-react";
 
-// Zen Coder lineup from zenlm.org
-const ZEN_CODER_MODELS = [
+// Complete Zen model lineup — 14 models across Zen4 and Zen3 generations
+// Pricing is per 1M tokens (input/output)
+
+// Zen4 models (9 models) — flagship generation
+const ZEN4_MODELS = [
   {
-    name: "Zen Coder 4B",
-    size: "4B",
-    base: "Qwen3-4B-Instruct",
-    vram: "8 GB",
-    context: "32K",
-    status: "Trained",
-  },
-  {
-    name: "Zen Coder 24B",
-    size: "24B",
-    base: "Devstral Small 2",
-    vram: "24 GB",
-    context: "256K",
-    status: "Trained",
+    name: "zen4",
+    size: "~400B",
+    base: "GLM-5",
+    context: "202K",
+    pricing: "$3.00 / $9.60",
+    status: "Released",
     flagship: true,
   },
   {
-    name: "Zen Coder 123B",
-    size: "123B",
-    base: "Devstral 2",
-    vram: "128 GB",
-    context: "256K",
-    status: "Training",
+    name: "zen4-ultra",
+    size: "~400B",
+    base: "GLM-5 (thinking)",
+    context: "202K",
+    pricing: "$3.00 / $9.60",
+    status: "Released",
   },
   {
-    name: "Zen Coder Max",
-    size: "358B",
-    base: "GLM-4.7 (MoE)",
-    vram: "180 GB",
-    context: "200K",
-    status: "Planned",
+    name: "zen4-pro",
+    size: "80B/3B MoE",
+    base: "Qwen3-Next-80B-A3B",
+    context: "131K",
+    pricing: "$2.70 / $2.70",
+    status: "Released",
+  },
+  {
+    name: "zen4-max",
+    size: "235B/22B MoE",
+    base: "Qwen3-235B-A22B",
+    context: "131K",
+    pricing: "$3.60 / $3.60",
+    status: "Released",
+  },
+  {
+    name: "zen4-mini",
+    size: "8B",
+    base: "Qwen3-8B",
+    context: "40K",
+    pricing: "$0.60 / $0.60",
+    status: "Released",
+  },
+  {
+    name: "zen4-thinking",
+    size: "80B/3B MoE+CoT",
+    base: "Qwen3-Next-80B-A3B (thinking)",
+    context: "131K",
+    pricing: "$2.70 / $2.70",
+    status: "Released",
+  },
+  {
+    name: "zen4-coder",
+    size: "480B/35B MoE",
+    base: "Qwen3-Coder-480B-A35B",
+    context: "262K",
+    pricing: "$3.60 / $3.60",
+    status: "Released",
+  },
+  {
+    name: "zen4-coder-pro",
+    size: "480B BF16",
+    base: "Qwen3-Coder-480B BF16",
+    context: "262K",
+    pricing: "$4.50 / $4.50",
+    status: "Released",
     frontier: true,
   },
   {
-    name: "Zen Coder Ultra",
-    size: "1T",
-    base: "Kimi K2 (MoE)",
-    vram: "256 GB",
-    context: "128K",
-    status: "Planned",
+    name: "zen4-coder-flash",
+    size: "30B/3B MoE",
+    base: "Qwen3-Coder-30B-A3B",
+    context: "262K",
+    pricing: "$1.50 / $1.50",
+    status: "Released",
   },
 ];
 
-// Dataset stats from zenlm.org
-const DATASET_STATS = [
-  { value: "8.47B", label: "Tokens", description: "Total training tokens across all data sources" },
-  { value: "3.35M", label: "Samples", description: "Training samples with conversation context" },
-  { value: "1,452", label: "Repositories", description: "Open source and private codebases" },
-  { value: "15yr", label: "History", description: "Years of development history (2010-2025)" },
+// Zen3 models (5 models) — previous generation + specialized
+const ZEN3_MODELS = [
+  {
+    name: "zen3-omni",
+    size: "~200B",
+    base: "GLM-4.7 (multimodal)",
+    context: "202K",
+    pricing: "$1.80 / $6.60",
+    status: "Released",
+  },
+  {
+    name: "zen3-vl",
+    size: "30B/3B MoE VL",
+    base: "Qwen3-VL-30B-A3B",
+    context: "131K",
+    pricing: "$0.45 / $1.80",
+    status: "Released",
+  },
+  {
+    name: "zen3-nano",
+    size: "4B",
+    base: "Qwen3-4B",
+    context: "40K",
+    pricing: "$0.30 / $0.30",
+    status: "Released",
+  },
+  {
+    name: "zen3-guard",
+    size: "4B",
+    base: "Qwen3-4B (safety)",
+    context: "40K",
+    pricing: "$0.30 / $0.30",
+    status: "Released",
+  },
+  {
+    name: "zen3-embedding",
+    size: "text-embedding-3-large",
+    base: "text-embedding-3-large",
+    context: "8K",
+    pricing: "$0.39 / $0.39",
+    status: "Released",
+  },
 ];
 
-// AI Ecosystem categories from zenlm.org
+// Combined for the overview table
+const ALL_ZEN_MODELS = [...ZEN4_MODELS, ...ZEN3_MODELS];
+
+// Quick stats
+const QUICK_STATS = [
+  { value: "14", label: "Models", description: "Zen4 + Zen3 model lineup" },
+  { value: "4B-480B", label: "Params", description: "From edge to frontier scale" },
+  { value: "262K", label: "Max Context", description: "Tokens in a single request" },
+  { value: "$0.30", label: "Starting at", description: "Per 1M tokens (input)" },
+];
+
+// Model family categories
 const ECOSYSTEM_CATEGORIES = [
   {
     icon: Brain,
-    title: "Language Models",
-    description: "6 core models from 0.6B to 32B. zen-nano for edge, zen-eco for efficiency, zen-omni for multimodal, zen-next for frontier reasoning.",
+    title: "Zen4 Flagship",
+    description: "zen4 and zen4-ultra powered by GLM-5 (~400B). zen4-pro and zen4-max via Qwen3 MoE. zen4-mini for fast inference at 8B.",
   },
   {
     icon: Code2,
-    title: "Zen Coder",
-    description: "5 coding models from 4B to 1T trained on 8.47B tokens of agentic programming data. State-of-the-art on tool use and multi-step coding.",
+    title: "Zen4 Coder",
+    description: "zen4-coder (480B/35B MoE), zen4-coder-pro (480B BF16 full), and zen4-coder-flash (30B/3B MoE). Up to 262K context.",
+  },
+  {
+    icon: Zap,
+    title: "Zen4 Thinking",
+    description: "zen4-thinking with chain-of-thought via Qwen3-Next MoE. zen4-ultra with GLM-5 deep reasoning. Built for complex multi-step tasks.",
   },
   {
     icon: Eye,
-    title: "Vision & Multimodal",
-    description: "zen-vl for vision-language, zen-designer for visual understanding, zen-artist for image generation, zen-omni for unified multimodal.",
-  },
-  {
-    icon: Video,
-    title: "Video & 3D",
-    description: "zen-director for video generation, zen-video for high-quality synthesis, zen-3d for 3D assets, zen-world for world simulation.",
-  },
-  {
-    icon: Music,
-    title: "Audio",
-    description: "zen-musician for music generation, zen-foley for sound effects, zen-scribe for transcription, zen-dub for voice dubbing.",
+    title: "Zen3 Vision & Multimodal",
+    description: "zen3-omni (GLM-4.7 multimodal, ~200B). zen3-vl (Qwen3-VL-30B-A3B) for vision-language understanding.",
   },
   {
     icon: Shield,
-    title: "Specialized",
-    description: "zen-guard for safety, zen-embedding for vectors, zen-reranker for search, zen-translator for translation, zen-agent for tool use.",
+    title: "Zen3 Safety & Edge",
+    description: "zen3-nano (Qwen3-4B) for edge. zen3-guard (Qwen3-4B safety) for content filtering and guardrails.",
+  },
+  {
+    icon: Database,
+    title: "Zen3 Embeddings",
+    description: "zen3-embedding (text-embedding-3-large) for vector search, RAG, and semantic similarity. 8K context.",
   },
 ];
 
-// Model families with full details
+// Model families with full details — organized as Zen4 and Zen3 generations
 const MODEL_FAMILIES = {
-  coder: {
-    title: "Zen Coder",
-    description: "Agentic coding models trained on 8.47B tokens of real programming sessions",
-    icon: Code2,
-    models: [
-      {
-        name: "Zen Coder 4B",
-        params: "4B",
-        context: "32K tokens",
-        vram: "8 GB",
-        license: "Apache 2.0",
-        base: "Qwen3-4B-Instruct",
-        features: [
-          "Edge deployment",
-          "Real agentic debug sessions",
-          "Multi-file refactoring",
-          "Tool use patterns",
-        ],
-        status: "Trained",
-        huggingface: "https://huggingface.co/zenlm/zen-coder",
-      },
-      {
-        name: "Zen Coder 24B",
-        badge: "FLAGSHIP",
-        params: "24B",
-        context: "256K tokens",
-        vram: "24 GB",
-        license: "Apache 2.0",
-        base: "Devstral Small 2",
-        features: [
-          "Production-ready agentic coding",
-          "Long context understanding",
-          "Real debugging workflows",
-          "Professional development patterns",
-        ],
-        status: "Trained",
-        huggingface: "https://huggingface.co/zenlm/zen-coder-24b",
-      },
-      {
-        name: "Zen Coder 123B",
-        params: "123B",
-        context: "256K tokens",
-        vram: "128 GB",
-        license: "Apache 2.0",
-        base: "Devstral 2",
-        features: [
-          "Large-scale agentic tasks",
-          "Complex multi-step coding",
-          "Advanced tool orchestration",
-          "Enterprise-grade performance",
-        ],
-        status: "Training",
-        huggingface: "https://huggingface.co/zenlm/zen-coder-123b",
-      },
-      {
-        name: "Zen Coder Max",
-        badge: "FRONTIER",
-        params: "358B MoE",
-        context: "200K tokens",
-        vram: "180 GB",
-        license: "Apache 2.0",
-        base: "GLM-4.7 (MoE)",
-        features: [
-          "Frontier agentic capability",
-          "MoE efficiency",
-          "State-of-the-art SWE-bench",
-          "Tool calling with glm47 parser",
-        ],
-        status: "Planned",
-        huggingface: "https://huggingface.co/zenlm/zen-coder-max",
-      },
-      {
-        name: "Zen Coder Ultra",
-        badge: "1T",
-        params: "1T MoE",
-        context: "128K tokens",
-        vram: "256 GB",
-        license: "Apache 2.0",
-        base: "Kimi K2 (MoE)",
-        features: [
-          "Trillion parameter scale",
-          "Ultimate agentic reasoning",
-          "200-300 sequential tool calls",
-          "Heavy mode (8 trajectories)",
-        ],
-        status: "Planned",
-        huggingface: "https://huggingface.co/zenlm/zen-coder-ultra",
-      },
-    ],
-  },
-  language: {
-    title: "Language Models",
-    description: "Efficient general-purpose language understanding",
+  zen4_flagship: {
+    title: "Zen4 Flagship",
+    description: "Core language models powered by GLM-5 and Qwen3 MoE architectures",
     icon: Brain,
     models: [
       {
-        name: "zen-nano",
-        params: "0.6B",
+        name: "zen4",
+        badge: "FLAGSHIP",
+        params: "~400B",
+        context: "202K tokens",
+        base: "GLM-5",
+        pricing: { input: "$3.00", output: "$9.60" },
+        features: [
+          "Frontier-class reasoning",
+          "202K context window",
+          "OpenAI-compatible API",
+          "Production-grade reliability",
+        ],
+        status: "Released",
+      },
+      {
+        name: "zen4-ultra",
+        params: "~400B",
+        context: "202K tokens",
+        base: "GLM-5 (thinking)",
+        pricing: { input: "$3.00", output: "$9.60" },
+        features: [
+          "Deep chain-of-thought reasoning",
+          "Complex problem decomposition",
+          "Multi-step analysis",
+          "Extended deliberation",
+        ],
+        status: "Released",
+      },
+      {
+        name: "zen4-pro",
+        params: "80B/3B active MoE",
+        context: "131K tokens",
+        base: "Qwen3-Next-80B-A3B",
+        pricing: { input: "$2.70", output: "$2.70" },
+        features: [
+          "Efficient MoE architecture",
+          "3B active parameters per token",
+          "Balanced cost/performance",
+          "General-purpose reasoning",
+        ],
+        status: "Released",
+      },
+      {
+        name: "zen4-max",
+        params: "235B/22B active MoE",
+        context: "131K tokens",
+        base: "Qwen3-235B-A22B",
+        pricing: { input: "$3.60", output: "$3.60" },
+        features: [
+          "Large-scale MoE reasoning",
+          "22B active parameters per token",
+          "Complex task performance",
+          "Enterprise workloads",
+        ],
+        status: "Released",
+      },
+      {
+        name: "zen4-mini",
+        params: "8B",
         context: "40K tokens",
-        license: "Apache 2.0",
-        base: "Qwen3-0.6B",
-        performance: "44K tokens/sec (M3 Max)",
-        memory: "0.4-1.2GB",
+        base: "Qwen3-8B",
+        pricing: { input: "$0.60", output: "$0.60" },
         features: [
-          "Edge deployment",
-          "Mobile devices",
-          "Embedded systems",
-          "On-device AI",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-nano-0.6b",
-      },
-      {
-        name: "zen-eco",
-        params: "4B",
-        context: "32K tokens",
-        license: "Apache 2.0",
-        base: "Qwen3-3B",
-        performance: "28K tokens/sec (RTX 4090)",
-        memory: "2-8GB",
-        features: [
-          "General-purpose",
+          "Fast inference",
+          "Low cost per token",
+          "Edge-deployable",
           "Instruction following",
-          "Thinking variants",
-          "Agent variants",
-        ],
-        status: "In Development",
-        huggingface: "https://huggingface.co/zenlm/zen-eco-4b-instruct",
-      },
-      {
-        name: "zen-agent",
-        params: "4B",
-        context: "32K tokens",
-        license: "Apache 2.0",
-        base: "Qwen3-3B",
-        features: [
-          "Tool calling",
-          "MCP support",
-          "Agentic workflows",
-          "Function execution",
         ],
         status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-agent-4b",
       },
       {
-        name: "zen-omni",
-        badge: "MULTIMODAL",
-        params: "7B",
-        context: "32K tokens",
-        license: "Apache 2.0",
-        base: "Qwen3-Omni",
+        name: "zen4-thinking",
+        params: "80B/3B active MoE+CoT",
+        context: "131K tokens",
+        base: "Qwen3-Next-80B-A3B (thinking)",
+        pricing: { input: "$2.70", output: "$2.70" },
         features: [
-          "Text + Vision + Audio",
-          "Unified multimodal",
-          "Cross-modal reasoning",
-          "Speech interaction",
+          "Chain-of-thought reasoning",
+          "MoE efficiency with deep thought",
+          "Step-by-step problem solving",
+          "Math and logic tasks",
         ],
         status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-omni",
       },
     ],
   },
-  vision: {
-    title: "Vision-Language Models",
-    description: "Advanced visual understanding and multimodal reasoning",
+  zen4_coder: {
+    title: "Zen4 Coder",
+    description: "Agentic coding models with up to 262K context for large codebases",
+    icon: Code2,
+    models: [
+      {
+        name: "zen4-coder",
+        badge: "FLAGSHIP",
+        params: "480B/35B active MoE",
+        context: "262K tokens",
+        base: "Qwen3-Coder-480B-A35B",
+        pricing: { input: "$3.60", output: "$3.60" },
+        features: [
+          "State-of-the-art agentic coding",
+          "262K context for full repos",
+          "35B active params for efficiency",
+          "Multi-file refactoring",
+        ],
+        status: "Released",
+      },
+      {
+        name: "zen4-coder-pro",
+        badge: "FRONTIER",
+        params: "480B BF16",
+        context: "262K tokens",
+        base: "Qwen3-Coder-480B BF16",
+        pricing: { input: "$4.50", output: "$4.50" },
+        features: [
+          "Full precision BF16 inference",
+          "Maximum coding capability",
+          "Complex architecture design",
+          "Enterprise-grade output",
+        ],
+        status: "Released",
+      },
+      {
+        name: "zen4-coder-flash",
+        params: "30B/3B active MoE",
+        context: "262K tokens",
+        base: "Qwen3-Coder-30B-A3B",
+        pricing: { input: "$1.50", output: "$1.50" },
+        features: [
+          "Fast code generation",
+          "Low-cost coding assistant",
+          "262K context maintained",
+          "Ideal for autocomplete and edits",
+        ],
+        status: "Released",
+      },
+    ],
+  },
+  zen3_multimodal: {
+    title: "Zen3 Multimodal",
+    description: "Vision, multimodal understanding, and content moderation",
     icon: Eye,
     models: [
       {
-        name: "zen-vl-4b-instruct",
+        name: "zen3-omni",
+        badge: "MULTIMODAL",
+        params: "~200B",
+        context: "202K tokens",
+        base: "GLM-4.7 (multimodal)",
+        pricing: { input: "$1.80", output: "$6.60" },
+        features: [
+          "Text + Vision + Audio",
+          "Unified multimodal understanding",
+          "Cross-modal reasoning",
+          "202K context window",
+        ],
+        status: "Released",
+      },
+      {
+        name: "zen3-vl",
+        params: "30B/3B active MoE VL",
+        context: "131K tokens",
+        base: "Qwen3-VL-30B-A3B",
+        pricing: { input: "$0.45", output: "$1.80" },
+        features: [
+          "Vision-language understanding",
+          "Image and document analysis",
+          "OCR and visual QA",
+          "Efficient MoE inference",
+        ],
+        status: "Released",
+      },
+    ],
+  },
+  zen3_specialized: {
+    title: "Zen3 Edge, Safety & Embeddings",
+    description: "Lightweight models for edge deployment, safety, and vector search",
+    icon: Shield,
+    models: [
+      {
+        name: "zen3-nano",
         params: "4B",
-        context: "32K (256K expandable)",
-        license: "Apache 2.0",
-        base: "Qwen3-VL-4B",
+        context: "40K tokens",
+        base: "Qwen3-4B",
+        pricing: { input: "$0.30", output: "$0.30" },
         features: [
-          "Image analysis",
-          "OCR (32 languages)",
-          "Multimodal reasoning",
-          "Zen persona",
+          "Edge deployment",
+          "Mobile and embedded devices",
+          "Ultra-low cost",
+          "Fast inference",
         ],
         status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-vl-4b-instruct",
       },
       {
-        name: "zen-vl-4b-agent",
+        name: "zen3-guard",
         params: "4B",
-        context: "32K (256K expandable)",
-        license: "Apache 2.0",
+        context: "40K tokens",
+        base: "Qwen3-4B (safety)",
+        pricing: { input: "$0.30", output: "$0.30" },
         features: [
-          "Function calling",
-          "GUI interaction",
-          "Visual agent",
-          "Tool use",
+          "Content safety classification",
+          "Prompt injection detection",
+          "PII filtering",
+          "Guardrail enforcement",
         ],
         status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-vl-4b-agent",
       },
       {
-        name: "zen-vl-8b-instruct",
-        params: "8B",
-        context: "256K (1M expandable)",
-        license: "Apache 2.0",
-        base: "Qwen3-VL-8B",
+        name: "zen3-embedding",
+        params: "text-embedding-3-large",
+        context: "8K tokens",
+        base: "text-embedding-3-large",
+        pricing: { input: "$0.39", output: "$0.39" },
         features: [
-          "Video comprehension",
-          "Spatial reasoning",
-          "STEM/math/code",
-          "Comprehensive analysis",
+          "High-quality text embeddings",
+          "Semantic similarity search",
+          "RAG retrieval",
+          "Clustering and classification",
         ],
         status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-vl-8b-instruct",
-      },
-      {
-        name: "zen-vl-30b-instruct",
-        params: "30B (31B MoE)",
-        context: "256K (1M expandable)",
-        license: "Apache 2.0",
-        base: "Qwen3-VL-30B",
-        features: [
-          "Comprehensive vision",
-          "OCR (32 languages)",
-          "STEM reasoning",
-          "Video comprehension",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-vl-30b-instruct",
-      },
-    ],
-  },
-  generative3d: {
-    title: "3D Generation",
-    description: "Create 3D assets and worlds from text and images",
-    icon: Box,
-    models: [
-      {
-        name: "zen-3d",
-        params: "3.3B",
-        license: "Apache 2.0",
-        features: [
-          "Point cloud control",
-          "OBJ/GLB/USD/FBX output",
-          "~30s per model",
-          "10GB memory",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-3d",
-      },
-      {
-        name: "zen-voyager",
-        license: "Apache 2.0",
-        features: [
-          "Image → 3D video",
-          "Camera control",
-          "RGB + depth output",
-          "Point clouds",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-voyager",
-      },
-      {
-        name: "zen-world",
-        license: "Apache 2.0",
-        features: [
-          "City-scale environments",
-          "Complete world synthesis",
-          "Large-scale generation",
-          "24GB+ memory",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-world",
-      },
-    ],
-  },
-  video: {
-    title: "Video Generation",
-    description: "Create videos from text and images",
-    icon: Video,
-    models: [
-      {
-        name: "zen-director",
-        params: "5B",
-        license: "Apache 2.0",
-        features: [
-          "Text/Image to video",
-          "Up to 10s, 24 FPS",
-          "1280x720 output",
-          "~60s generation",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-director-5b",
-      },
-      {
-        name: "zen-video",
-        license: "Apache 2.0",
-        features: [
-          "High-quality video",
-          "Professional synthesis",
-          "High-resolution",
-          "Variable length",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-video",
-      },
-      {
-        name: "zen-video-i2v",
-        license: "Apache 2.0",
-        features: [
-          "Image to video",
-          "Animate static images",
-          "~45s generation",
-          "5 second output",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-video-i2v",
-      },
-    ],
-  },
-  audio: {
-    title: "Audio Generation",
-    description: "Create music and sound effects",
-    icon: Music,
-    models: [
-      {
-        name: "zen-musician",
-        params: "7B",
-        license: "Apache 2.0",
-        features: [
-          "Lyrics → full songs",
-          "Vocals + accompaniment",
-          "5 languages",
-          "~360s for 30s audio",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-musician-7b",
-      },
-      {
-        name: "zen-foley",
-        license: "Apache 2.0",
-        features: [
-          "Video → sound effects",
-          "Professional foley",
-          "48kHz audio",
-          "~15s for 10s audio",
-        ],
-        status: "Released",
-        huggingface: "https://huggingface.co/zenlm/zen-foley",
       },
     ],
   },
@@ -524,20 +483,22 @@ const ModelCard = ({ model }: { model: any }) => {
             <p className="text-sm font-medium text-white">{model.context}</p>
           </div>
         )}
-        {model.license && (
+        {model.pricing && (
           <div>
             <p className="text-[10px] text-neutral-500 uppercase tracking-wider mb-1">
-              License
+              Pricing (per 1M tokens)
             </p>
-            <p className="text-sm font-medium text-white">{model.license}</p>
+            <p className="text-sm font-medium text-white">
+              In: {model.pricing.input} / Out: {model.pricing.output}
+            </p>
           </div>
         )}
-        {model.performance && (
+        {model.base && (
           <div>
             <p className="text-[10px] text-neutral-500 uppercase tracking-wider mb-1">
-              Performance
+              Base Model
             </p>
-            <p className="text-sm font-medium text-white">{model.performance}</p>
+            <p className="text-sm font-medium text-white">{model.base}</p>
           </div>
         )}
       </div>
@@ -611,10 +572,10 @@ const ZenModels = () => {
   return (
     <div className="min-h-screen bg-[var(--black)] text-[var(--white)]">
       <Helmet>
-        <title>Zen LM - Open Foundation Models for Agentic AI | Hanzo AI</title>
+        <title>Zen Models - 14 AI Models from Edge to Frontier | Hanzo AI</title>
         <meta
           name="description"
-          content="30+ models from 0.6B to 1T parameters across language, vision, audio, video, and 3D. Production-ready AI models for agentic coding, multimodal understanding, and creative generation."
+          content="14 Zen models across Zen4 and Zen3 generations. GLM-5 flagship, Qwen3 MoE coding, multimodal vision, safety, and embeddings. OpenAI-compatible API at api.hanzo.ai."
         />
       </Helmet>
       <Navbar />
@@ -642,7 +603,7 @@ const ZenModels = () => {
             >
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">
                 <Code2 className="w-3 h-3" />
-                30+ Open Models
+                14 Models -- Zen4 + Zen3
               </span>
             </motion.div>
 
@@ -652,9 +613,9 @@ const ZenModels = () => {
               transition={{ duration: 0.4, delay: 0.05 }}
               className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-medium tracking-tight leading-[1.1] mb-6 text-center"
             >
-              <span className="text-white">Open Foundation Models</span>
+              <span className="text-white">Zen Model Lineup</span>
               <br />
-              <span className="text-neutral-400">for Agentic AI</span>
+              <span className="text-neutral-400">Edge to Frontier AI</span>
             </motion.h1>
 
             <motion.p
@@ -663,9 +624,9 @@ const ZenModels = () => {
               transition={{ duration: 0.4, delay: 0.1 }}
               className="text-base lg:text-lg text-neutral-400 leading-relaxed mb-8 max-w-3xl mx-auto text-center"
             >
-              Zen LM provides production-ready AI models for agentic coding, multimodal understanding,
-              and creative generation. Our flagship Zen Coder models are trained on 8.47B tokens
-              of real programming sessions.
+              14 production-ready models across two generations. Zen4 brings GLM-5 flagship reasoning
+              and Qwen3 MoE coding with 262K context. Zen3 covers multimodal, vision, safety, and
+              embeddings. OpenAI-compatible API at api.hanzo.ai and api.zen.hanzo.ai.
             </motion.p>
 
             {/* CTAs */}
@@ -738,8 +699,8 @@ const ZenModels = () => {
           </div>
         </section>
 
-        {/* Zen Coder Feature Section */}
-        <section id="zen-coder" className="py-20 px-4 md:px-8">
+        {/* All Models Pricing Table */}
+        <section id="pricing-table" className="py-20 px-4 md:px-8">
           <div className="max-w-7xl mx-auto py-12 px-8 rounded-2xl bg-neutral-950 border border-neutral-800">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -748,14 +709,15 @@ const ZenModels = () => {
               className="text-center mb-10"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                Zen Coder - Agentic Coding Models
+                Complete Model Lineup & Pricing
               </h2>
               <p className="text-neutral-400 text-lg">
-                Fine-tuned on 8.47B tokens of real programming sessions
+                OpenAI-compatible API at api.hanzo.ai and api.zen.hanzo.ai
               </p>
             </motion.div>
 
-            {/* Models Table */}
+            {/* Zen4 Table */}
+            <h3 className="text-xl font-bold text-white mb-4">Zen4 (9 models)</h3>
             <div className="overflow-x-auto mb-10">
               <table className="w-full border-collapse bg-black border border-neutral-800 rounded-xl overflow-hidden">
                 <thead>
@@ -763,13 +725,12 @@ const ZenModels = () => {
                     <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Model</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Size</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Base</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">VRAM</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Context</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Pricing (In/Out per 1M)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {ZEN_CODER_MODELS.map((model) => (
+                  {ZEN4_MODELS.map((model) => (
                     <tr
                       key={model.name}
                       className={`border-t border-neutral-800 hover:bg-neutral-900/50 transition-colors ${model.flagship ? "bg-white/5" : ""}`}
@@ -783,65 +744,75 @@ const ZenModels = () => {
                             </span>
                           )}
                           {model.frontier && (
-                            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-white/10 text-white border border-white/20">
+                            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
                               FRONTIER
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-neutral-300">{model.size}</td>
-                      <td className="px-6 py-4 text-neutral-300">{model.base}</td>
-                      <td className="px-6 py-4 text-neutral-300">{model.vram}</td>
-                      <td className="px-6 py-4 text-neutral-300">{model.context}</td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`inline-block px-3 py-1 text-xs font-semibold rounded-full uppercase ${
-                            model.status === "Trained"
-                              ? "bg-white/10 text-white border border-white/20"
-                              : model.status === "Training"
-                              ? "bg-neutral-800 text-neutral-300 border border-neutral-700"
-                              : "bg-neutral-900 text-neutral-400 border border-neutral-800"
-                          }`}
-                          style={model.status === "Training" ? { animation: "pulse 2s infinite" } : {}}
-                        >
-                          {model.status}
-                        </span>
-                      </td>
+                      <td className="px-6 py-4 text-neutral-300 font-mono text-sm">{model.size}</td>
+                      <td className="px-6 py-4 text-neutral-300 text-sm">{model.base}</td>
+                      <td className="px-6 py-4 text-neutral-300 font-mono text-sm">{model.context}</td>
+                      <td className="px-6 py-4 text-neutral-300 font-mono text-sm">{model.pricing}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            {/* Coder Features Grid */}
+            {/* Zen3 Table */}
+            <h3 className="text-xl font-bold text-white mb-4">Zen3 (5 models)</h3>
+            <div className="overflow-x-auto mb-10">
+              <table className="w-full border-collapse bg-black border border-neutral-800 rounded-xl overflow-hidden">
+                <thead>
+                  <tr className="bg-neutral-900/80">
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Model</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Size</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Base</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Context</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">Pricing (In/Out per 1M)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ZEN3_MODELS.map((model) => (
+                    <tr
+                      key={model.name}
+                      className="border-t border-neutral-800 hover:bg-neutral-900/50 transition-colors"
+                    >
+                      <td className="px-6 py-4">
+                        <span className="font-semibold text-white">{model.name}</span>
+                      </td>
+                      <td className="px-6 py-4 text-neutral-300 font-mono text-sm">{model.size}</td>
+                      <td className="px-6 py-4 text-neutral-300 text-sm">{model.base}</td>
+                      <td className="px-6 py-4 text-neutral-300 font-mono text-sm">{model.context}</td>
+                      <td className="px-6 py-4 text-neutral-300 font-mono text-sm">{model.pricing}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Tier info */}
             <div className="grid md:grid-cols-3 gap-6">
               <div className="p-6 bg-black border border-neutral-800 rounded-xl hover:border-neutral-600 transition-colors">
-                <h3 className="text-lg font-semibold text-white mb-2">Real Agentic Data</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">API Access</h3>
                 <p className="text-neutral-400 text-sm">
-                  Trained on actual agentic debug sessions - not synthetic data. Real debugging workflows,
-                  multi-file refactoring, and tool use patterns.
+                  OpenAI-compatible endpoints at api.hanzo.ai and api.zen.hanzo.ai.
+                  Drop-in replacement for any OpenAI SDK.
                 </p>
               </div>
               <div className="p-6 bg-black border border-neutral-800 rounded-xl hover:border-neutral-600 transition-colors">
-                <h3 className="text-lg font-semibold text-white mb-2">Production Code</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">Subscription Tiers</h3>
                 <p className="text-neutral-400 text-sm">
-                  15 years of professional development across AI, Web3, cryptography, and modern software
-                  engineering from 1,452 repositories.
+                  Pro, Pro Max, Ultra, and Ultra Max tiers with increasing rate limits
+                  and priority access. Pay-as-you-go also available.
                 </p>
               </div>
               <div className="p-6 bg-black border border-neutral-800 rounded-xl hover:border-neutral-600 transition-colors">
-                <h3 className="text-lg font-semibold text-white mb-2">Open Training</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">qwen3+ Architecture</h3>
                 <p className="text-neutral-400 text-sm">
-                  Use{" "}
-                  <a
-                    href="https://github.com/zenlm/zen-trainer"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline text-white hover:text-neutral-300"
-                  >
-                    zen-trainer
-                  </a>
-                  {" "}to fine-tune on your own data. Supports MLX (Apple Silicon), Unsloth, and DeepSpeed.
+                  All Zen models are built exclusively on qwen3+ architectures (Qwen3, GLM-5).
+                  No qwen2 models in the lineup.
                 </p>
               </div>
             </div>
@@ -886,25 +857,11 @@ const ZenModels = () => {
           </div>
         </section>
 
-        {/* Dataset Section */}
-        <section id="dataset" className="py-20 px-4 md:px-8 bg-neutral-950/50">
-          <div className="max-w-7xl mx-auto py-12 px-8 rounded-2xl bg-neutral-950 border border-neutral-800">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-10"
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                Zen Agentic Dataset
-              </h2>
-              <p className="text-neutral-400 text-lg">
-                8.47 Billion Tokens of Real-World Agentic Programming
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-              {DATASET_STATS.map((stat, idx) => (
+        {/* Quick Stats */}
+        <section id="stats" className="py-20 px-4 md:px-8 bg-neutral-950/50">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {QUICK_STATS.map((stat, idx) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
@@ -920,27 +877,6 @@ const ZenModels = () => {
                   <p className="text-neutral-500 text-sm">{stat.description}</p>
                 </motion.div>
               ))}
-            </div>
-
-            <div className="text-center">
-              <p className="text-neutral-400 mb-6">Available for research and commercial licensing.</p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <a
-                  href="mailto:z@hanzo.ai"
-                  className="inline-flex items-center px-6 py-3 rounded-full font-medium transition-all hover:opacity-90 text-sm"
-                  style={{ backgroundColor: BRAND_COLOR, color: "#ffffff" }}
-                >
-                  Request Access
-                </a>
-                <a
-                  href="https://huggingface.co/datasets/hanzoai/zen-agentic-dataset"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 rounded-full font-medium transition-colors border border-neutral-700 text-white hover:bg-neutral-900 text-sm"
-                >
-                  View on HuggingFace
-                </a>
-              </div>
             </div>
           </div>
         </section>
@@ -995,7 +931,7 @@ const ZenModels = () => {
               >
                 <Download className="w-8 h-8 mx-auto mb-4 text-purple-400" />
                 <h3 className="text-xl font-semibold text-white mb-2">HuggingFace</h3>
-                <p className="text-neutral-400 text-sm mb-4">Access all 30+ models via HuggingFace Hub</p>
+                <p className="text-neutral-400 text-sm mb-4">Access Zen models via HuggingFace Hub</p>
                 <a
                   href="https://huggingface.co/zenlm"
                   target="_blank"
