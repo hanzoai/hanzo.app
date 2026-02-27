@@ -10,12 +10,12 @@ interface AuthButtonsProps {
   onOpenCommandPalette?: () => void;
 }
 
-// Zen model family for dropdown — top picks from the 14-model lineup
+// Zen model family for dropdown — top picks
 const zenModels = [
   {
     name: "zen4",
     params: "~400B",
-    description: "Flagship reasoning (GLM-5)",
+    description: "Flagship reasoning",
     icon: Brain,
     href: "/zen/models",
     external: false,
@@ -31,7 +31,7 @@ const zenModels = [
   {
     name: "zen3-omni",
     params: "~200B",
-    description: "Multimodal (GLM-4.7)",
+    description: "Multimodal vision + text",
     icon: Sparkles,
     href: "/zen/models",
     external: false,

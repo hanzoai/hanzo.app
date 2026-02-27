@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -18,33 +18,11 @@ import {
   Clock,
 } from "lucide-react";
 
-// Model categories overview
-const MODEL_CATEGORIES = [
-  {
-    icon: Brain,
-    title: "Zen4 Flagship",
-    count: "6 models",
-    description: "GLM-5 (~400B) and Qwen3 MoE models. zen4, zen4-ultra, zen4-pro, zen4-max, zen4-mini, and zen4-thinking.",
-  },
-  {
-    icon: Code2,
-    title: "Zen4 Coder",
-    count: "3 models",
-    description: "Qwen3-Coder with 262K context. zen4-coder (480B MoE), zen4-coder-pro (480B BF16), zen4-coder-flash (30B MoE).",
-  },
-  {
-    icon: Eye,
-    title: "Zen3 Multimodal",
-    count: "2 models",
-    description: "zen3-omni (GLM-4.7 ~200B multimodal) and zen3-vl (Qwen3-VL-30B-A3B) for vision-language tasks.",
-  },
-  {
-    icon: Shield,
-    title: "Zen3 Specialized",
-    count: "3 models",
-    description: "zen3-nano (4B edge), zen3-guard (safety), zen3-embedding (text-embedding-3-large) for vectors.",
-  },
-];
+const PRICING_API = "https://api.hanzo.ai/v1/pricing";
+
+const ICON_MAP: Record<string, any> = {
+  Sparkles: Brain, Rocket: Brain, Code: Code2, Eye, Brain, Shield, Search: Globe, Image: Globe, Mic: Globe, Network: Cpu,
+};
 
 // Key benefits
 const BENEFITS = [
@@ -72,22 +50,66 @@ const BENEFITS = [
 
 const BRAND_COLOR = "#8b5cf6"; // Purple for Zen
 
-// Quick stats for the demo panel
-const QUICK_STATS = [
-  { label: "Models", value: "14" },
-  { label: "Params", value: "4B-480B" },
-  { label: "Context", value: "262K" },
-  { label: "Starting", value: "$0.30/M" },
-];
+interface ZenStats {
+  total: number;
+  maxContext: string;
+  maxParams: string;
+  cheapest: string;
+  families: { name: string; count: number; icon: string; description: string }[];
+}
+
+function useZenStats(): ZenStats {
+  const [stats, setStats] = useState<ZenStats>({
+    total: 0, maxContext: "—", maxParams: "—", cheapest: "—", families: [],
+  });
+
+  useEffect(() => {
+    fetch(PRICING_API)
+      .then((r) => r.json())
+      .then((data) => {
+        const models = data.hanzoModels || [];
+        const families = data.families || [];
+        let maxCtx = 0;
+        let minPrice = Infinity;
+        for (const m of models) {
+          const ctx = parseInt(String(m.contextWindow || m.context || "0").replace(/[^\d]/g, ""), 10);
+          if (ctx > maxCtx) maxCtx = ctx;
+          const inp = m.inputPrice ?? m.pricing?.input ?? Infinity;
+          if (typeof inp === "number" && inp < minPrice) minPrice = inp;
+        }
+        setStats({
+          total: models.length,
+          maxContext: maxCtx >= 1000 ? `${Math.round(maxCtx / 1000)}K` : `${maxCtx}`,
+          maxParams: "1T+",
+          cheapest: minPrice < Infinity ? `$${minPrice.toFixed(2)}/M` : "—",
+          families: families.map((f: any) => ({
+            name: f.name, count: f.models?.length || 0, icon: f.icon || "Brain", description: f.description || "",
+          })),
+        });
+      })
+      .catch(() => {});
+  }, []);
+
+  return stats;
+}
 
 const Zen = () => {
+  const stats = useZenStats();
+
+  const QUICK_STATS = [
+    { label: "Models", value: stats.total > 0 ? String(stats.total) : "—" },
+    { label: "Params", value: stats.maxParams },
+    { label: "Context", value: stats.maxContext },
+    { label: "Starting", value: stats.cheapest },
+  ];
+
   return (
     <div className="min-h-screen bg-[var(--black)] text-[var(--white)]">
       <Helmet>
-        <title>Zen Models - 14 AI Models from Edge to Frontier | Hanzo AI</title>
+        <title>Zen Models — Edge to Frontier AI | Hanzo AI</title>
         <meta
           name="description"
-          content="14 Zen models across Zen4 and Zen3 generations. GLM-5 flagship, Qwen3 MoE coding, multimodal vision, safety, and embeddings. OpenAI-compatible API."
+          content="Zen models across Zen4 and Zen3 generations. Flagship reasoning, MoE coding with 262K context, multimodal vision, safety, and embeddings. OpenAI-compatible API."
         />
       </Helmet>
       <Navbar />
@@ -139,8 +161,8 @@ const Zen = () => {
                   transition={{ duration: 0.4, delay: 0.1 }}
                   className="text-base lg:text-lg text-neutral-400 leading-relaxed mb-8 max-w-xl"
                 >
-                  14 production-ready models across Zen4 and Zen3 generations. GLM-5 flagship reasoning,
-                  Qwen3 MoE coding with 262K context, multimodal vision, safety, and embeddings.
+                  Over 1T parameters across Zen4 and Zen3 generations. Flagship reasoning,
+                  MoE coding with {stats.maxContext} context, multimodal vision, safety, and embeddings.
                 </motion.p>
 
                 {/* CTAs */}
@@ -240,7 +262,7 @@ const Zen = () => {
                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <Shield className="w-4 h-4 text-purple-400" />
-                        <span className="text-neutral-300">qwen3+ only • GLM-5 and Qwen3 MoE</span>
+                        <span className="text-neutral-300">Zen MoE architecture • Dense and Mixture-of-Experts</span>
                       </div>
                     </div>
                   </div>
@@ -265,11 +287,11 @@ const Zen = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {MODEL_CATEGORIES.map((category, idx) => {
-                const Icon = category.icon;
+              {stats.families.slice(0, 8).map((family, idx) => {
+                const Icon = ICON_MAP[family.icon] || Brain;
                 return (
                   <motion.div
-                    key={category.title}
+                    key={family.name}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -279,9 +301,9 @@ const Zen = () => {
                     <div className="mx-auto w-12 h-12 mb-4 flex items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20">
                       <Icon className="w-6 h-6 text-purple-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-white mb-1">{category.title}</h3>
-                    <p className="text-sm text-purple-400 mb-2">{category.count}</p>
-                    <p className="text-neutral-500 text-sm">{category.description}</p>
+                    <h3 className="text-lg font-semibold text-white mb-1">{family.name}</h3>
+                    <p className="text-sm text-purple-400 mb-2">{family.count} models</p>
+                    <p className="text-neutral-500 text-sm">{family.description}</p>
                   </motion.div>
                 );
               })}

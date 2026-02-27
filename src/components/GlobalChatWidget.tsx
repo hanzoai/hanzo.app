@@ -21,10 +21,10 @@ const BRAND_COLOR = "#e11633";
 const zenModels = [
   { id: "zen4-mini", name: "Zen4 Mini", params: "8B", description: "Fast, low-cost inference" },
   { id: "zen4-pro", name: "Zen4 Pro", params: "80B/3B MoE", description: "Balanced general-purpose" },
-  { id: "zen4", name: "Zen4", params: "~400B", description: "Flagship reasoning (GLM-5)" },
+  { id: "zen4", name: "Zen4", params: "~400B", description: "Flagship reasoning" },
   { id: "zen4-coder-flash", name: "Zen4 Coder Flash", params: "30B/3B MoE", description: "Fast code generation" },
   { id: "zen4-coder", name: "Zen4 Coder", params: "480B/35B MoE", description: "Agentic coding" },
-  { id: "zen3-omni", name: "Zen3 Omni", params: "~200B", description: "Multimodal (GLM-4.7)" },
+  { id: "zen3-omni", name: "Zen3 Omni", params: "~200B", description: "Multimodal vision + text" },
 ];
 
 // Chat action presets - matching footer order

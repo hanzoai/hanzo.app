@@ -23,7 +23,7 @@ import {
   Download,
 } from "lucide-react";
 
-// Complete Zen model lineup — 14 models across Zen4 and Zen3 generations
+// Complete Zen model lineup across Zen4 and Zen3 generations
 // Pricing is per 1M tokens (input/output)
 
 // Zen4 models (9 models) — flagship generation
@@ -31,7 +31,7 @@ const ZEN4_MODELS = [
   {
     name: "zen4",
     size: "~400B",
-    base: "GLM-5",
+    base: "Dense ~400B",
     context: "202K",
     pricing: "$3.00 / $9.60",
     status: "Released",
@@ -40,23 +40,23 @@ const ZEN4_MODELS = [
   {
     name: "zen4-ultra",
     size: "~400B",
-    base: "GLM-5 (thinking)",
+    base: "Dense ~400B (thinking)",
     context: "202K",
     pricing: "$3.00 / $9.60",
     status: "Released",
   },
   {
     name: "zen4-pro",
-    size: "80B/3B MoE",
-    base: "Qwen3-Next-80B-A3B",
+    size: "80B MoE, 3B active",
+    base: "80B MoE, 3B active",
     context: "131K",
     pricing: "$2.70 / $2.70",
     status: "Released",
   },
   {
     name: "zen4-max",
-    size: "235B/22B MoE",
-    base: "Qwen3-235B-A22B",
+    size: "235B MoE, 22B active",
+    base: "235B MoE, 22B active",
     context: "131K",
     pricing: "$3.60 / $3.60",
     status: "Released",
@@ -64,23 +64,23 @@ const ZEN4_MODELS = [
   {
     name: "zen4-mini",
     size: "8B",
-    base: "Qwen3-8B",
+    base: "Dense 8B",
     context: "40K",
     pricing: "$0.60 / $0.60",
     status: "Released",
   },
   {
     name: "zen4-thinking",
-    size: "80B/3B MoE+CoT",
-    base: "Qwen3-Next-80B-A3B (thinking)",
+    size: "80B MoE, 3B active+CoT",
+    base: "80B MoE, 3B active (thinking)",
     context: "131K",
     pricing: "$2.70 / $2.70",
     status: "Released",
   },
   {
     name: "zen4-coder",
-    size: "480B/35B MoE",
-    base: "Qwen3-Coder-480B-A35B",
+    size: "480B MoE, 35B active",
+    base: "480B MoE, 35B active",
     context: "262K",
     pricing: "$3.60 / $3.60",
     status: "Released",
@@ -88,7 +88,7 @@ const ZEN4_MODELS = [
   {
     name: "zen4-coder-pro",
     size: "480B BF16",
-    base: "Qwen3-Coder-480B BF16",
+    base: "Dense 480B BF16",
     context: "262K",
     pricing: "$4.50 / $4.50",
     status: "Released",
@@ -96,8 +96,8 @@ const ZEN4_MODELS = [
   },
   {
     name: "zen4-coder-flash",
-    size: "30B/3B MoE",
-    base: "Qwen3-Coder-30B-A3B",
+    size: "30B MoE, 3B active",
+    base: "30B MoE, 3B active",
     context: "262K",
     pricing: "$1.50 / $1.50",
     status: "Released",
@@ -109,15 +109,15 @@ const ZEN3_MODELS = [
   {
     name: "zen3-omni",
     size: "~200B",
-    base: "GLM-4.7 (multimodal)",
+    base: "Dense ~200B (multimodal)",
     context: "202K",
     pricing: "$1.80 / $6.60",
     status: "Released",
   },
   {
     name: "zen3-vl",
-    size: "30B/3B MoE VL",
-    base: "Qwen3-VL-30B-A3B",
+    size: "30B MoE, 3B active VL",
+    base: "30B MoE, 3B active VL",
     context: "131K",
     pricing: "$0.45 / $1.80",
     status: "Released",
@@ -125,7 +125,7 @@ const ZEN3_MODELS = [
   {
     name: "zen3-nano",
     size: "4B",
-    base: "Qwen3-4B",
+    base: "Dense 4B",
     context: "40K",
     pricing: "$0.30 / $0.30",
     status: "Released",
@@ -133,7 +133,7 @@ const ZEN3_MODELS = [
   {
     name: "zen3-guard",
     size: "4B",
-    base: "Qwen3-4B (safety)",
+    base: "Dense 4B (safety)",
     context: "40K",
     pricing: "$0.30 / $0.30",
     status: "Released",
@@ -153,7 +153,7 @@ const ALL_ZEN_MODELS = [...ZEN4_MODELS, ...ZEN3_MODELS];
 
 // Quick stats
 const QUICK_STATS = [
-  { value: "14", label: "Models", description: "Zen4 + Zen3 model lineup" },
+  { value: String(ZEN4_MODELS.length + ZEN3_MODELS.length), label: "Models", description: "Zen4 + Zen3 model lineup" },
   { value: "4B-480B", label: "Params", description: "From edge to frontier scale" },
   { value: "262K", label: "Max Context", description: "Tokens in a single request" },
   { value: "$0.30", label: "Starting at", description: "Per 1M tokens (input)" },
@@ -164,27 +164,27 @@ const ECOSYSTEM_CATEGORIES = [
   {
     icon: Brain,
     title: "Zen4 Flagship",
-    description: "zen4 and zen4-ultra powered by GLM-5 (~400B). zen4-pro and zen4-max via Qwen3 MoE. zen4-mini for fast inference at 8B.",
+    description: "zen4 and zen4-ultra powered by Dense ~400B (~400B). zen4-pro and zen4-max via MoE. zen4-mini for fast inference at 8B.",
   },
   {
     icon: Code2,
     title: "Zen4 Coder",
-    description: "zen4-coder (480B/35B MoE), zen4-coder-pro (480B BF16 full), and zen4-coder-flash (30B/3B MoE). Up to 262K context.",
+    description: "zen4-coder (480B MoE, 35B active), zen4-coder-pro (480B BF16 full), and zen4-coder-flash (30B MoE, 3B active). Up to 262K context.",
   },
   {
     icon: Zap,
     title: "Zen4 Thinking",
-    description: "zen4-thinking with chain-of-thought via Qwen3-Next MoE. zen4-ultra with GLM-5 deep reasoning. Built for complex multi-step tasks.",
+    description: "zen4-thinking with chain-of-thought via MoE architecture. zen4-ultra with Dense ~400B deep reasoning. Built for complex multi-step tasks.",
   },
   {
     icon: Eye,
     title: "Zen3 Vision & Multimodal",
-    description: "zen3-omni (GLM-4.7 multimodal, ~200B). zen3-vl (Qwen3-VL-30B-A3B) for vision-language understanding.",
+    description: "zen3-omni (Dense ~200B multimodal, ~200B). zen3-vl (30B MoE, 3B active VL) for vision-language understanding.",
   },
   {
     icon: Shield,
     title: "Zen3 Safety & Edge",
-    description: "zen3-nano (Qwen3-4B) for edge. zen3-guard (Qwen3-4B safety) for content filtering and guardrails.",
+    description: "zen3-nano (Dense 4B) for edge. zen3-guard (Dense 4B safety) for content filtering and guardrails.",
   },
   {
     icon: Database,
@@ -197,7 +197,7 @@ const ECOSYSTEM_CATEGORIES = [
 const MODEL_FAMILIES = {
   zen4_flagship: {
     title: "Zen4 Flagship",
-    description: "Core language models powered by GLM-5 and Qwen3 MoE architectures",
+    description: "Core language models powered by Dense ~400B and MoE architectures",
     icon: Brain,
     models: [
       {
@@ -205,7 +205,7 @@ const MODEL_FAMILIES = {
         badge: "FLAGSHIP",
         params: "~400B",
         context: "202K tokens",
-        base: "GLM-5",
+        base: "Dense ~400B",
         pricing: { input: "$3.00", output: "$9.60" },
         features: [
           "Frontier-class reasoning",
@@ -219,7 +219,7 @@ const MODEL_FAMILIES = {
         name: "zen4-ultra",
         params: "~400B",
         context: "202K tokens",
-        base: "GLM-5 (thinking)",
+        base: "Dense ~400B (thinking)",
         pricing: { input: "$3.00", output: "$9.60" },
         features: [
           "Deep chain-of-thought reasoning",
@@ -233,7 +233,7 @@ const MODEL_FAMILIES = {
         name: "zen4-pro",
         params: "80B/3B active MoE",
         context: "131K tokens",
-        base: "Qwen3-Next-80B-A3B",
+        base: "80B MoE, 3B active",
         pricing: { input: "$2.70", output: "$2.70" },
         features: [
           "Efficient MoE architecture",
@@ -247,7 +247,7 @@ const MODEL_FAMILIES = {
         name: "zen4-max",
         params: "235B/22B active MoE",
         context: "131K tokens",
-        base: "Qwen3-235B-A22B",
+        base: "235B MoE, 22B active",
         pricing: { input: "$3.60", output: "$3.60" },
         features: [
           "Large-scale MoE reasoning",
@@ -261,7 +261,7 @@ const MODEL_FAMILIES = {
         name: "zen4-mini",
         params: "8B",
         context: "40K tokens",
-        base: "Qwen3-8B",
+        base: "Dense 8B",
         pricing: { input: "$0.60", output: "$0.60" },
         features: [
           "Fast inference",
@@ -275,7 +275,7 @@ const MODEL_FAMILIES = {
         name: "zen4-thinking",
         params: "80B/3B active MoE+CoT",
         context: "131K tokens",
-        base: "Qwen3-Next-80B-A3B (thinking)",
+        base: "80B MoE, 3B active (thinking)",
         pricing: { input: "$2.70", output: "$2.70" },
         features: [
           "Chain-of-thought reasoning",
@@ -297,7 +297,7 @@ const MODEL_FAMILIES = {
         badge: "FLAGSHIP",
         params: "480B/35B active MoE",
         context: "262K tokens",
-        base: "Qwen3-Coder-480B-A35B",
+        base: "480B MoE, 35B active",
         pricing: { input: "$3.60", output: "$3.60" },
         features: [
           "State-of-the-art agentic coding",
@@ -312,7 +312,7 @@ const MODEL_FAMILIES = {
         badge: "FRONTIER",
         params: "480B BF16",
         context: "262K tokens",
-        base: "Qwen3-Coder-480B BF16",
+        base: "Dense 480B BF16",
         pricing: { input: "$4.50", output: "$4.50" },
         features: [
           "Full precision BF16 inference",
@@ -326,7 +326,7 @@ const MODEL_FAMILIES = {
         name: "zen4-coder-flash",
         params: "30B/3B active MoE",
         context: "262K tokens",
-        base: "Qwen3-Coder-30B-A3B",
+        base: "30B MoE, 3B active",
         pricing: { input: "$1.50", output: "$1.50" },
         features: [
           "Fast code generation",
@@ -348,7 +348,7 @@ const MODEL_FAMILIES = {
         badge: "MULTIMODAL",
         params: "~200B",
         context: "202K tokens",
-        base: "GLM-4.7 (multimodal)",
+        base: "Dense ~200B (multimodal)",
         pricing: { input: "$1.80", output: "$6.60" },
         features: [
           "Text + Vision + Audio",
@@ -362,7 +362,7 @@ const MODEL_FAMILIES = {
         name: "zen3-vl",
         params: "30B/3B active MoE VL",
         context: "131K tokens",
-        base: "Qwen3-VL-30B-A3B",
+        base: "30B MoE, 3B active VL",
         pricing: { input: "$0.45", output: "$1.80" },
         features: [
           "Vision-language understanding",
@@ -383,7 +383,7 @@ const MODEL_FAMILIES = {
         name: "zen3-nano",
         params: "4B",
         context: "40K tokens",
-        base: "Qwen3-4B",
+        base: "Dense 4B",
         pricing: { input: "$0.30", output: "$0.30" },
         features: [
           "Edge deployment",
@@ -397,7 +397,7 @@ const MODEL_FAMILIES = {
         name: "zen3-guard",
         params: "4B",
         context: "40K tokens",
-        base: "Qwen3-4B (safety)",
+        base: "Dense 4B (safety)",
         pricing: { input: "$0.30", output: "$0.30" },
         features: [
           "Content safety classification",
@@ -572,10 +572,10 @@ const ZenModels = () => {
   return (
     <div className="min-h-screen bg-[var(--black)] text-[var(--white)]">
       <Helmet>
-        <title>Zen Models - 14 AI Models from Edge to Frontier | Hanzo AI</title>
+        <title>Zen Models — Edge to Frontier AI | Hanzo AI</title>
         <meta
           name="description"
-          content="14 Zen models across Zen4 and Zen3 generations. GLM-5 flagship, Qwen3 MoE coding, multimodal vision, safety, and embeddings. OpenAI-compatible API at api.hanzo.ai."
+          content="Zen models across Zen4 and Zen3 generations. Flagship reasoning, MoE coding, multimodal vision, safety, and embeddings. OpenAI-compatible API at api.hanzo.ai."
         />
       </Helmet>
       <Navbar />
@@ -603,7 +603,7 @@ const ZenModels = () => {
             >
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">
                 <Code2 className="w-3 h-3" />
-                14 Models -- Zen4 + Zen3
+                Zen4 + Zen3 Models
               </span>
             </motion.div>
 
@@ -624,9 +624,9 @@ const ZenModels = () => {
               transition={{ duration: 0.4, delay: 0.1 }}
               className="text-base lg:text-lg text-neutral-400 leading-relaxed mb-8 max-w-3xl mx-auto text-center"
             >
-              14 production-ready models across two generations. Zen4 brings GLM-5 flagship reasoning
-              and Qwen3 MoE coding with 262K context. Zen3 covers multimodal, vision, safety, and
-              embeddings. OpenAI-compatible API at api.hanzo.ai and api.zen.hanzo.ai.
+              Over 1T parameters across two generations. Zen4 brings flagship reasoning
+              and MoE coding with 262K context. Zen3 covers multimodal, vision, safety, and
+              embeddings. OpenAI-compatible API at api.hanzo.ai.
             </motion.p>
 
             {/* CTAs */}
@@ -809,10 +809,10 @@ const ZenModels = () => {
                 </p>
               </div>
               <div className="p-6 bg-black border border-neutral-800 rounded-xl hover:border-neutral-600 transition-colors">
-                <h3 className="text-lg font-semibold text-white mb-2">qwen3+ Architecture</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">Zen MoE Architecture</h3>
                 <p className="text-neutral-400 text-sm">
-                  All Zen models are built exclusively on qwen3+ architectures (Qwen3, GLM-5).
-                  No qwen2 models in the lineup.
+                  All Zen models use latest-generation Dense and Mixture-of-Experts architectures
+                  optimized for quality, efficiency, and scale.
                 </p>
               </div>
             </div>

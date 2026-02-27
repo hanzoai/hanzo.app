@@ -11,7 +11,7 @@ const PersonalPlans = () => {
       billingPeriod: " forever",
       description: "Open source tools, run locally and privately",
       features: [
-        "Access to all 14 Zen models (Zen4 + Zen3)",
+        "Access to all Zen models (Zen4 + Zen3)",
         "Local deployment on your infrastructure", 
         "Full source code access",
         "Community support",
