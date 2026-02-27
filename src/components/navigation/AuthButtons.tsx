@@ -123,7 +123,7 @@ const AuthButtons = ({ user, onOpenCommandPalette }: AuthButtonsProps) => {
         </Button>
       </Link>
 
-      {/* Try Hanzo dropdown - hover activated */}
+      {/* Try Zen dropdown - hover activated */}
       <div
         className="relative"
         ref={dropdownRef}
