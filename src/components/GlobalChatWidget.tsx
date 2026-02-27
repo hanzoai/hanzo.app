@@ -381,7 +381,7 @@ const GlobalChatWidget = () => {
                   <div
                     className={`max-w-[85%] px-3 py-2 rounded-2xl text-sm ${
                       message.role === "user"
-                        ? "bg-[#fd4444] text-white rounded-br-md"
+                        ? "bg-white text-neutral-900 rounded-br-md"
                         : "bg-neutral-800 text-neutral-200 rounded-bl-md"
                     }`}
                   >

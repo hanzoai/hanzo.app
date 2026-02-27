@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/contexts/ThemeContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Logo SVG for clipboard copy
 const LOGO_SVG = `<svg viewBox="0 0 67 67" xmlns="http://www.w3.org/2000/svg">
@@ -32,59 +32,9 @@ const contextMenuItems = [
 
 const Logo = () => {
   const { isDarkMode } = useTheme();
-  const [animationComplete, setAnimationComplete] = useState(false);
-  const [showIntroWordmark, setShowIntroWordmark] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
-  // Animation variants for the container
-  const logoVariants = {
-    initial: {
-      opacity: 0,
-    },
-    animate: {
-      opacity: 1,
-      transition: {
-        duration: 0.4,
-        delay: 0.1,
-        staggerChildren: 0.08,
-        when: "beforeChildren"
-      }
-    }
-  };
-
-  // Path animation variants — kept subtle to avoid overflow
-  const pathVariants = {
-    initial: {
-      opacity: 0,
-    },
-    animate: {
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-      }
-    }
-  };
-
-  // After logo animation, show wordmark briefly then hide
-  useEffect(() => {
-    const animTimer = setTimeout(() => {
-      setAnimationComplete(true);
-      setShowIntroWordmark(true);
-    }, 1200);
-
-    // Hide the intro wordmark after showing it
-    const hideTimer = setTimeout(() => {
-      setShowIntroWordmark(false);
-    }, 2500);
-
-    return () => {
-      clearTimeout(animTimer);
-      clearTimeout(hideTimer);
-    };
-  }, []);
 
   // Close context menu on click outside
   useEffect(() => {
@@ -119,7 +69,6 @@ const Logo = () => {
     if ('action' in item && item.action === 'copy-svg') {
       try {
         await navigator.clipboard.writeText(LOGO_SVG);
-        // Could add a toast notification here
       } catch (err) {
         console.error('Failed to copy SVG:', err);
       }
@@ -131,87 +80,29 @@ const Logo = () => {
   };
 
   const fillColor = isDarkMode ? "#ffffff" : "#000000";
-  const accentColor = isDarkMode ? "#DDDDDD" : "#DDDDDD";
-
-  // Show wordmark when hovering OR during intro animation
-  const shouldShowWordmark = isHovered || showIntroWordmark;
+  const accentColor = "#DDDDDD";
 
   return (
     <>
       <Link
         to="/"
-        className="relative flex items-center group"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className="relative flex items-center"
         onContextMenu={handleContextMenu}
       >
-        <motion.div
-          initial="initial"
-          animate="animate"
-          variants={logoVariants}
-          className="w-8 h-8 relative flex-shrink-0 overflow-hidden"
-          onAnimationComplete={() => setAnimationComplete(true)}
-          style={{ transformOrigin: "center center" }}
-        >
+        <div className="w-7 h-7 flex-shrink-0">
           <svg
             viewBox="0 0 67 67"
             xmlns="http://www.w3.org/2000/svg"
             className="w-full h-full"
           >
-            <motion.path
-              custom={1}
-              variants={pathVariants}
-              d="M22.21 67V44.6369H0V67H22.21Z"
-              fill={fillColor}
-            />
-            <motion.path
-              custom={1.5}
-              variants={pathVariants}
-              d="M0 44.6369L22.21 46.8285V44.6369H0Z"
-              fill={accentColor}
-            />
-            <motion.path
-              custom={2}
-              variants={pathVariants}
-              d="M66.7038 22.3184H22.2534L0.0878906 44.6367H44.4634L66.7038 22.3184Z"
-              fill={fillColor}
-            />
-            <motion.path
-              custom={3}
-              variants={pathVariants}
-              d="M22.21 0H0V22.3184H22.21V0Z"
-              fill={fillColor}
-            />
-            <motion.path
-              custom={4}
-              variants={pathVariants}
-              d="M66.7198 0H44.5098V22.3184H66.7198V0Z"
-              fill={fillColor}
-            />
-            <motion.path
-              custom={4.5}
-              variants={pathVariants}
-              d="M66.6753 22.3185L44.5098 20.0822V22.3185H66.6753Z"
-              fill={accentColor}
-            />
-            <motion.path
-              custom={5}
-              variants={pathVariants}
-              d="M66.7198 67V44.6369H44.5098V67H66.7198Z"
-              fill={fillColor}
-            />
+            <path d="M22.21 67V44.6369H0V67H22.21Z" fill={fillColor} />
+            <path d="M0 44.6369L22.21 46.8285V44.6369H0Z" fill={accentColor} />
+            <path d="M66.7038 22.3184H22.2534L0.0878906 44.6367H44.4634L66.7038 22.3184Z" fill={fillColor} />
+            <path d="M22.21 0H0V22.3184H22.21V0Z" fill={fillColor} />
+            <path d="M66.7198 0H44.5098V22.3184H66.7198V0Z" fill={fillColor} />
+            <path d="M66.6753 22.3185L44.5098 20.0822V22.3185H66.6753Z" fill={accentColor} />
+            <path d="M66.7198 67V44.6369H44.5098V67H66.7198Z" fill={fillColor} />
           </svg>
-        </motion.div>
-
-        {/* Wordmark - absolute positioned so it doesn't shift other content */}
-        <div className="absolute left-8 overflow-hidden">
-          <span
-            className={`font-bold text-xl ${isDarkMode ? "text-white" : "text-neutral-900"} whitespace-nowrap block transition-transform duration-300 ease-out ${
-              shouldShowWordmark ? "translate-x-0" : "-translate-x-full"
-            }`}
-          >
-            Hanzo
-          </span>
         </div>
       </Link>
 
