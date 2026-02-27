@@ -100,19 +100,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               <li>
                 <Button variant="ghost" className="w-full justify-start text-neutral-300 hover:bg-gray-900 hover:text-[var(--white)]">
                   <div className="w-4 h-4 bg-blue-600 rounded-sm flex items-center justify-center text-[10px] mr-2">G</div>
-                  GPT-4o
+                  GPT-5
                 </Button>
               </li>
               <li>
                 <Button variant="ghost" className="w-full justify-start text-neutral-300 hover:bg-gray-900 hover:text-[var(--white)]">
                   <div className="w-4 h-4 bg-purple-600 rounded-sm flex items-center justify-center text-[10px] mr-2">C</div>
-                  Claude 3
+                  Claude
                 </Button>
               </li>
               <li>
                 <Button variant="ghost" className="w-full justify-start text-neutral-300 hover:bg-gray-900 hover:text-[var(--white)]">
                   <div className="w-4 h-4 bg-green-600 rounded-sm flex items-center justify-center text-[10px] mr-2">L</div>
-                  Llama 3
+                  Llama 4
                 </Button>
               </li>
             </ul>

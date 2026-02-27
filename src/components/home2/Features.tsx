@@ -76,7 +76,7 @@ const ai = new HanzoAI({
 });
 
 const response = await ai.complete({
-  model: 'gpt-4',
+  model: 'gpt-5',
   prompt: 'Explain quantum computing',
   temperature: 0.7
 });`}

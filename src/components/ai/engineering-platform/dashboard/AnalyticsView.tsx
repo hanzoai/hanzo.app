@@ -56,15 +56,15 @@ const AnalyticsView = () => {
           <div className="grid grid-cols-2 gap-2 mt-3">
             <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-purple-600 mr-2"></div>
-              <span className="text-xs text-neutral-300">GPT-4o (42%)</span>
+              <span className="text-xs text-neutral-300">GPT-5 (42%)</span>
             </div>
             <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
-              <span className="text-xs text-neutral-300">Claude 3 (28%)</span>
+              <span className="text-xs text-neutral-300">Claude (28%)</span>
             </div>
             <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></div>
-              <span className="text-xs text-neutral-300">Llama 3 (15%)</span>
+              <span className="text-xs text-neutral-300">Llama 4 (15%)</span>
             </div>
             <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-pink-500 mr-2"></div>

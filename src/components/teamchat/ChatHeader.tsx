@@ -11,7 +11,7 @@ const ChatHeader: React.FC = () => {
       </div>
       <div>
         <h3 className="font-medium">Hanzo Assistant</h3>
-        <p className="text-xs text-neutral-400">Powered by GPT-4o</p>
+        <p className="text-xs text-neutral-400">Powered by GPT-5</p>
       </div>
       <Button variant="ghost" size="icon" className="ml-auto text-neutral-400 hover:text-[var(--white)]">
         <Settings className="h-5 w-5" />

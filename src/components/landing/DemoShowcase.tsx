@@ -62,7 +62,7 @@ const DemoShowcase: React.FC = () => {
                   <code className="block text-blue-400">import {"{"} <span className="text-green-400">useHanzoAI</span> {"}"} from <span className="text-yellow-300">'@hanzo/ai'</span>;</code>
                   <code className="block mt-4 text-blue-400">function <span className="text-purple-400">AIAssistant</span><span className="text-[var(--white)]">()</span> <span className="text-[var(--white)]">{"{"}</span></code>
                   <code className="block ml-4 text-blue-400">const {"{"} <span className="text-green-400">assistant, isLoading, error</span> {"}"} = <span className="text-purple-400">useHanzoAI</span>({"{"}</code>
-                  <code className="block ml-8 text-green-400">model: <span className="text-yellow-300">'gpt-4'</span>,</code>
+                  <code className="block ml-8 text-green-400">model: <span className="text-yellow-300">'gpt-5'</span>,</code>
                   <code className="block ml-8 text-green-400">temperature: <span className="text-orange-400">0.7</span>,</code>
                   <code className="block ml-8 text-green-400">systemPrompt: <span className="text-yellow-300">'You are a helpful AI assistant.'</span></code>
                   <code className="block ml-4 text-[var(--white)]">{"})"}</code>

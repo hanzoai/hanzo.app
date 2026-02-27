@@ -184,7 +184,7 @@ const GatewayMockup: React.FC<{ product: Product }> = ({ product }) => (
     <div className="p-4 border-b border-neutral-800">
       <div className="text-xs text-neutral-500 mb-2">Active Models</div>
       <div className="flex flex-wrap gap-2">
-        {['gpt-4o', 'claude-3.5', 'gemini-pro', 'llama-3.1'].map((model) => (
+        {['gpt-5', 'claude-sonnet-4-6', 'gemini-2.5-pro', 'llama-4-maverick'].map((model) => (
           <div key={model} className="flex items-center gap-2 px-3 py-1.5 bg-neutral-800 rounded-full text-xs">
             <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
             <span className="text-neutral-300">{model}</span>
@@ -207,7 +207,7 @@ const GatewayMockup: React.FC<{ product: Product }> = ({ product }) => (
         <div className="text-xs text-neutral-500 mb-2">Request</div>
         <pre className="text-xs font-mono text-neutral-400 overflow-hidden">
 {`{
-  "model": "gpt-4o",
+  "model": "gpt-5",
   "messages": [
     {"role": "user",
      "content": "Hello!"}
@@ -363,7 +363,7 @@ const ChatMockup: React.FC<{ product: Product }> = ({ product }) => (
       <span className="text-xs text-neutral-500 ml-2 font-mono">{product.shortName}</span>
       <div className="ml-auto flex items-center gap-2">
         <div className="w-2 h-2 rounded-full bg-green-400" />
-        <span className="text-xs text-neutral-400">gpt-4o</span>
+        <span className="text-xs text-neutral-400">gpt-5</span>
       </div>
     </div>
 
