@@ -43,41 +43,27 @@ const Logo = () => {
   const logoVariants = {
     initial: {
       opacity: 0,
-      rotateY: 180,
-      scale: 0.6
     },
     animate: {
       opacity: 1,
-      rotateY: 0,
-      scale: 1,
       transition: {
-        duration: 0.5,
-        delay: 0.2,
-        staggerChildren: 0.12,
+        duration: 0.4,
+        delay: 0.1,
+        staggerChildren: 0.08,
         when: "beforeChildren"
       }
     }
   };
 
-  // Path animation variants
+  // Path animation variants — kept subtle to avoid overflow
   const pathVariants = {
-    initial: (custom: number) => ({
+    initial: {
       opacity: 0,
-      scale: 0.8,
-      x: custom % 2 === 0 ? -15 : 15,
-      y: custom % 3 === 0 ? -15 : 15,
-      rotate: custom * 5
-    }),
+    },
     animate: {
       opacity: 1,
-      scale: 1,
-      x: 0,
-      y: 0,
-      rotate: 0,
       transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20
+        duration: 0.3,
       }
     }
   };
@@ -163,7 +149,7 @@ const Logo = () => {
           initial="initial"
           animate="animate"
           variants={logoVariants}
-          className="w-6 h-6 relative flex-shrink-0"
+          className="w-8 h-8 relative flex-shrink-0 overflow-hidden"
           onAnimationComplete={() => setAnimationComplete(true)}
           style={{ transformOrigin: "center center" }}
         >
