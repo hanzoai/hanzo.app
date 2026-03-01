@@ -66,7 +66,7 @@ const footerLinks = {
     title: "Learn",
     items: [
       { title: "Docs", href: "https://docs.hanzo.ai", external: true },
-      { title: "Blog", href: "/blog" },
+      { title: "Blog", href: "https://hanzo.ai/blog", external: true },
       { title: "Tutorials", href: "https://docs.hanzo.ai/tutorials", external: true },
     ],
   },
@@ -76,8 +76,8 @@ const footerLinks = {
       { title: "Availability", href: "/status" },
       { title: "Status", href: "/status" },
       { title: "Support center", href: "/contact" },
-      { title: "Privacy", href: "/privacy" },
-      { title: "Terms", href: "/terms" },
+      { title: "Privacy", href: "https://hanzo.ai/privacy", external: true },
+      { title: "Terms", href: "https://hanzo.ai/terms", external: true },
       { title: "Responsible disclosure", href: "/security" },
       { title: "Usage policy", href: "/terms" },
     ],
@@ -85,7 +85,7 @@ const footerLinks = {
   company: {
     title: "Company",
     items: [
-      { title: "Careers", href: "/careers" },
+      { title: "Careers", href: "https://hanzo.ai/careers", external: true },
       { title: "Philosophy", href: "/philosophy" },
       { title: "Zen Models", href: "/zen" },
       { title: "Research", href: "https://zenlm.org", external: true },
