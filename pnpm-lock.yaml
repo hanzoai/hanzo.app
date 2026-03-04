@@ -4,10 +4,16 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@hanzo/ui': link:../ui/pkg/ui
+
 importers:
 
   .:
     dependencies:
+      '@hanzo/ui':
+        specifier: link:../ui/pkg/ui
+        version: link:../ui/pkg/ui
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.10.0(react-hook-form@7.55.0(react@18.3.1))

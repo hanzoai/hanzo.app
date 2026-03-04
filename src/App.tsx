@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import GlobalChatWidget from "./components/GlobalChatWidget";
 import PageTransition from "./components/PageTransition";
 import KonamiCode from "./components/KonamiCode";
+import HanzoShellWrapper from "./components/HanzoShellWrapper";
 import Index from "./pages/Index";
 import AppLanding from "./pages/AppLanding";
 import Home2 from "./pages/Home2";
@@ -235,18 +236,20 @@ const App = () => {
   return (
     <BrowserRouter>
       <ThemeProvider>
-        <ScrollToTop />
-        <PageTransition>
-          {isAccountRoute(window.location.pathname) ? (
-            <AccountRoutes />
-          ) : (
-            <MarketingRoutes />
-          )}
-        </PageTransition>
-        {/* Global chat widget on all pages */}
-        <GlobalChatWidget />
-        {/* Easter egg - Konami code for secret menu */}
-        <KonamiCode />
+        <HanzoShellWrapper>
+          <ScrollToTop />
+          <PageTransition>
+            {isAccountRoute(window.location.pathname) ? (
+              <AccountRoutes />
+            ) : (
+              <MarketingRoutes />
+            )}
+          </PageTransition>
+          {/* Global chat widget on all pages */}
+          <GlobalChatWidget />
+          {/* Easter egg - Konami code for secret menu */}
+          <KonamiCode />
+        </HanzoShellWrapper>
       </ThemeProvider>
     </BrowserRouter>
   );
